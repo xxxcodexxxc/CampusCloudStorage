@@ -31,18 +31,21 @@ public class AccountController {
     @RequestMapping(value="/login",method= RequestMethod.POST)
     public String login(User user, HttpServletRequest request, RedirectAttributes attributes, RedirectAttributesModelMap modelMap) {
         LoginStateEnum loginState=userService.validate(user);
+
+        //登录状态不成功，则返回登录界面重新登录
         if(loginState!=LoginStateEnum.SUCCESS){
             return "login";
         }
 
+        //登录成功，进入首页
         int uId=user.getuId();
-        User userFromDB=userService.selectByPrimaryKey(uId);
+        User userFromDB=userService.getUserById(uId);
         int rootDir=userFromDB.getRootDir();
 
         HttpSession session=request.getSession();
         session.setAttribute("uId",uId);
-        session.setAttribute("rootDir",userFromDB.getRootDir());
-        session.setAttribute("recyclebin",userFromDB.getRecyclebin());
+        session.setAttribute("rootDir",userFromDB.getRootDir());//设置根目录session
+        session.setAttribute("recyclebin",userFromDB.getRecyclebin());//设置回收站根目录session
         modelMap.addFlashAttribute("uId",uId);
         attributes.addFlashAttribute("uId",uId);
         return "forward:/home/"+rootDir;
@@ -57,9 +60,11 @@ public class AccountController {
     public String register(User user,Model model) {
         RegisterStateEnum registerState = userService.register(user);
         model.addAttribute("msg",registerState.getStateInfo());
+        //注册成功，返回登录界面
         if(registerState==RegisterStateEnum.SUCCESS){
             return "login";
         }
+        //注册不成功，重新返回注册界面
         model.addAttribute("user",user);
         return "register";
     }

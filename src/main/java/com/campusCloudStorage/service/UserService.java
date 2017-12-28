@@ -11,7 +11,7 @@ public interface UserService {
      * @param uId 用户Id
      * @return 指定用户对象
      */
-    User selectByPrimaryKey(int uId);
+    User getUserById(int uId);
 
     /**
      * 用户注册

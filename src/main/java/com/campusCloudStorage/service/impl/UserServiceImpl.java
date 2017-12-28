@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService{
     private DirDao dirDao;
 
     @Override
-    public User selectByPrimaryKey(int uId) {
+    public User getUserById(int uId) {
         User user=userDao.selectByPrimaryKey(uId);
         return user;
     }
@@ -63,13 +63,16 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public LoginStateEnum validate(User user) {
+        //如果用户信息为空，返回信息不完整状态
         if(user==null || user.getuId()==null || user.getPassword()==null){
             return LoginStateEnum.IMCOMPLETE;
         }
         User userFromDB = userDao.selectByPrimaryKey(user.getuId());
+        //如果无此账号或者账号密码不正确，返回信息错误状态
         if(userFromDB==null || !userFromDB.getPassword().equals(user.getPassword())){
             return LoginStateEnum.INFO_ERROR;
         }
+        //验证通过
         return LoginStateEnum.SUCCESS;
     }
 

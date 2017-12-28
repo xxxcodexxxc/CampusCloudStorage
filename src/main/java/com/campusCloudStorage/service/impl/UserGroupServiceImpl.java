@@ -42,6 +42,7 @@ public class UserGroupServiceImpl implements UserGroupService{
 
     @Override
     public List<UserGroup> selectJoinedGroups(int uId) {
+        //先找到含有自己Id的GroupMember对象，再通过里面的gId，得到群组对象List
         List<GroupMember>groupMemberList=groupMemberDao.selectPermittedByUId(uId);
         List<UserGroup> detailGroupList=new ArrayList<UserGroup>();
         for (GroupMember groupMember:groupMemberList){

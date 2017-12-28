@@ -71,7 +71,7 @@ public class FriendController {
             return result.toString();
         }
 
-        User friend = userService.selectByPrimaryKey(friendId);
+        User friend = userService.getUserById(friendId);
         if(friend==null){
             result.append(FriendRequestStateEnum.NO_USER.getStateInfo());
             return result.toString();

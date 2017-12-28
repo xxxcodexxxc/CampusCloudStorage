@@ -40,23 +40,24 @@ public class FileController {
 
         String path = request.getServletContext().getRealPath(String.valueOf(uId));
         String fileName = String.valueOf(new Date().hashCode())+file.getOriginalFilename();
-        File dir = new File(path,fileName);
-        if(!dir.exists()){
-            dir.mkdirs();
+        File localFile = new File(path,fileName);
+        if(!localFile.exists()){
+            localFile.mkdirs();
         }
 
-        file.transferTo(dir);
+        file.transferTo(localFile);
 
         FileHeader fileHeader=new FileHeader();
         fileHeader.setName(file.getOriginalFilename());
         fileHeader.setSize((int)file.getSize());
         fileHeader.setParent(currentDir);
         fileHeader.setuId(uId);
-        fileHeader.setPath(dir.toString());
+        fileHeader.setPath(localFile.toString());
         fileHeaderService.createFileHeader(fileHeader);
 
         return "forward:/home/"+currentDir;
     }
+
 
 
     @RequestMapping(value="/{fId}/download",method = RequestMethod.POST)
@@ -82,6 +83,7 @@ public class FileController {
 
     @RequestMapping(value="/{fId}/remove",method = RequestMethod.POST)
     public String fileRemove(@PathVariable("fId") int fId, HttpServletRequest request){
+        //文件移入回收站
         HttpSession session=request.getSession();
         int recyclebin=(int)session.getAttribute("recyclebin");
 
@@ -95,6 +97,7 @@ public class FileController {
 
     @RequestMapping(value="/{fId}/delete",method = RequestMethod.POST)
     public String fileDelete(@PathVariable("fId") int fId, HttpServletRequest request){
+        //将文件彻底删除
         HttpSession session=request.getSession();
         int currentDir = (int)session.getAttribute("currentDir");
         fileHeaderService.deleteFileHeader(fId);
@@ -134,9 +137,6 @@ public class FileController {
     @RequestMapping(value="/{uId}/{friendId}/{fId}/deletefriendshare",method = RequestMethod.POST)
     public String deleteFriendShareFile(@PathVariable("uId") int uId, @PathVariable("friendId") int friendId,@PathVariable("fId") int fId, HttpServletRequest request, Model model){
         userFileShareService.deleteByPrimaryKey(uId,friendId,fId);
-
-        HttpSession session=request.getSession();
-        int currentDir=(int)session.getAttribute("currentDir");
 
         model.addAttribute("msg","取消成功");
         return "forward:/file/"+uId+"/"+friendId+"/friendshare";

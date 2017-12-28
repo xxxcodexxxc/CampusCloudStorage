@@ -30,6 +30,7 @@ public class RecyclebinController {
 
     @RequestMapping(value="/{dId}",method= RequestMethod.POST)
     public String list(@PathVariable("dId")int dId, HttpServletRequest request, Model model) {
+
         HttpSession session=request.getSession();
         int uId=(int)session.getAttribute("uId");
         int rootDir=(int)session.getAttribute("rootDir");
@@ -39,8 +40,6 @@ public class RecyclebinController {
         List<Dir> dirList=dirService.getFirstChildrenDirs(dId);
         List<FileHeader> fileHeaderList=dirService.getFirstChildrenFileHeaders(dId);
         List<Dir> pathList=dirService.getPathList(dir);
-
-        //User user=userService.getDirById(uId);
 
         model.addAttribute("uId",uId);
         model.addAttribute("currentDir",dId);
@@ -94,7 +93,4 @@ public class RecyclebinController {
         int currentDir = (int)session.getAttribute("currentDir");
         return "forward:/recyclebin/"+currentDir;
     }
-
-
-
 }

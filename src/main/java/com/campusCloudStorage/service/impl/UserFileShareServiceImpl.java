@@ -25,6 +25,7 @@ public class UserFileShareServiceImpl implements UserFileShareService{
 
     @Override
     public List<FriendFileShareItem> selectSharedFilesByUId(int fromId, int toId) {
+        //先得到UserFileShare的List，再填充FriendFileShareItemList
         List<UserFileShare> userFileShareList=userFileShareDao.selectByUId(fromId,toId);
         List<FriendFileShareItem> fileShareList=new ArrayList<FriendFileShareItem>();
         for (UserFileShare userFileShare: userFileShareList) {

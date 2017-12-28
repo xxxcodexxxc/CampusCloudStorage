@@ -31,28 +31,19 @@ public class FileHeaderServiceImpl implements FileHeaderService{
             return CreateStateEnum.FAILED;
         }
 
-        List<FileHeader> siblings=fileHeaderDao.selectByParentId(fileHeader.getParent());
-        if(siblings!=null){
-            for (FileHeader sibling:siblings){
-                //如果当前目录下有同名文件，则删除。
-                if(sibling.getName().equals(fileHeader.getName())){
-                    fileHeaderDao.deleteByPrimaryKey(sibling.getfId());
-                    userFileShareDao.deleteByFId(sibling.getfId());
-                    //TODO
-                }
-            }
-        }
-
-
         fileHeader.setSubmitTime(new Date());
-        fileHeaderDao.insert(fileHeader);
-        return CreateStateEnum.SUCCESS;
+        int insertCount = fileHeaderDao.insert(fileHeader);
+        if(insertCount==1){
+            return CreateStateEnum.SUCCESS;
+        }
+        return CreateStateEnum.FAILED;
     }
 
     @Override
     public DeleteStateEnum deleteFileHeader(int fId) {
         FileHeader fileHeader= getFileHeaderById(fId);
 
+        //删除本地文件系统的文件
         File file = new File(fileHeader.getPath());
         if(file.exists()){
             file.delete();

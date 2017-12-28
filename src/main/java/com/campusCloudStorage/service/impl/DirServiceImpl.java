@@ -97,13 +97,17 @@ public class DirServiceImpl implements com.campusCloudStorage.service.DirService
             }
         }
 
+        //删除该文件夹下的第一代子文件夹。要用到递归
         List<Dir> firstChildrenDirList= getFirstChildrenDirs(dId);
         if(firstChildrenDirList!=null){
             for(Dir child:firstChildrenDirList){
+                //递归调用删除子文件夹
                 deleteDirById(child.getdId());
                 dirDao.deleteByPrimaryKey(child.getdId());
             }
         }
+
+        //将该文件夹删除
         dirDao.deleteByPrimaryKey(dId);
         return DeleteStateEnum.SUCCESS;
     }
@@ -117,6 +121,7 @@ public class DirServiceImpl implements com.campusCloudStorage.service.DirService
     @Override
     public Dir getDirWithFirstChildrenById(int dId) {
         Dir dir = dirDao.selectByPrimaryKey(dId);
+        //填充子文件List和子文件夹List
         if(dir!=null){
             List<Dir>childrenDirList=dirDao.selectByParentId(dId);
             List<FileHeader>childrenFileList=fileHeaderDao.selectByParentId(dId);
@@ -139,19 +144,23 @@ public class DirServiceImpl implements com.campusCloudStorage.service.DirService
         return childrenFileList;
     }
 
+    //返回一个包含所有子孙文件夹和子孙文件的文件夹对象，需要用到递归。
     @Override
     public Dir getDirWithAllChildren(int dId) {
         Dir rootDir= dirDao.selectByPrimaryKey(dId);
         if(rootDir!=null){
+            //添加该文件夹下的第一代子文件夹
             List<Dir> firstChildrenDirList=dirDao.selectByParentId(dId);
             if(firstChildrenDirList!=null){
                 int len=firstChildrenDirList.size();
                 for(int i=0;i<len;++i){
                     Dir dir=firstChildrenDirList.get(i);
+                    //递归调用，填充子文件夹的孙文件夹，孙文件
                     dir.setChildrenDirList(getDirWithAllChildren(dir.getdId()).getChildrenDirList());
                 }
                 rootDir.setChildrenDirList(firstChildrenDirList);
             }
+            //添加该文件夹下的第一代子文件
             List<FileHeader> firstChildrenFileHeaderList=fileHeaderDao.selectByParentId(dId);
             rootDir.setChildrenFileHeaderList(firstChildrenFileHeaderList);
         }
@@ -160,6 +169,7 @@ public class DirServiceImpl implements com.campusCloudStorage.service.DirService
 
     @Override
     public List<Dir> getSiblingDirs(Dir dir) {
+        //先找到父文件夹，再得到除了自己以外的父文件夹下的其他子文件夹，即为兄弟文件夹
         Dir parentDir= getDirWithFirstChildrenById(dir.getParent());
         List<Dir>siblingsDirList=null;
         if(parentDir!=null){
@@ -176,6 +186,7 @@ public class DirServiceImpl implements com.campusCloudStorage.service.DirService
 
     @Override
     public List<Dir> getPathList(Dir dir) {
+        //不断寻找父文件夹，直到root文件夹（root文件夹的父文件夹为空）
         List<Dir>path=new ArrayList<>();
         Dir currentDir=dir;
         path.add(currentDir);

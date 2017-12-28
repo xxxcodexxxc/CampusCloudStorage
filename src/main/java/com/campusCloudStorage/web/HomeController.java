@@ -43,7 +43,7 @@ public class HomeController {
         int rootDir=(int)session.getAttribute("rootDir");
         int recyclebin=(int)session.getAttribute("recyclebin");
 
-        User user=userService.selectByPrimaryKey(uId);
+        User user=userService.getUserById(uId);
 
         Dir dir=dirService.getDirById(dId);
         List<Dir> dirList=dirService.getFirstChildrenDirs(dId);

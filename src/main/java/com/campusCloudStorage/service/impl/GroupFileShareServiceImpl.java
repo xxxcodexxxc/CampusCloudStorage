@@ -32,8 +32,10 @@ public class GroupFileShareServiceImpl implements com.campusCloudStorage.service
 
     @Override
     public List<GroupFileShareItem> getGroupSharedFilesByGId(int gId) {
+        //先得到GroupFileShare的List，随后填充GroupFileShareItem
         List<GroupFileShare> groupFileShareList=groupFileShareDao.selectByGId(gId);
         List<GroupFileShareItem> fileShareList=new ArrayList<GroupFileShareItem>();
+
         for (GroupFileShare groupFileShare: groupFileShareList) {
             GroupFileShareItem shareItem=new GroupFileShareItem();
             FileHeader fileHeader= fileHeaderDao.selectByPrimaryKey(groupFileShare.getfId());

@@ -35,6 +35,7 @@ public class GroupController {
 
     @RequestMapping(value="/{uId}",method= RequestMethod.POST)
     public String generalList(@PathVariable("uId") int uId, HttpServletRequest request, Model model) {
+        //群组总览
         HttpSession session=request.getSession();
         int rootDir=(int)session.getAttribute("rootDir");
         int recyclebin=(int)session.getAttribute("recyclebin");
@@ -52,14 +53,15 @@ public class GroupController {
 
     @RequestMapping(value="/{uId}/{gId}",method= RequestMethod.POST)
     public String detailList(@PathVariable("uId") int uId, @PathVariable("gId") int gId, HttpServletRequest request, Model model) {
+        //某一群组详细信息
         HttpSession session=request.getSession();
         int rootDir=(int)session.getAttribute("rootDir");
         int recyclebin=(int)session.getAttribute("recyclebin");
 
-        User owner = userGroupService.selectOwner(gId);
-        List<User> memberList=userGroupService.selectMembers(gId);
-        List<GroupFileShareItem> groupFileShareList = groupFileShareService.getGroupSharedFilesByGId(gId);
-        List<User>unpermittedMemberList=groupMemberService.selectUnpermittedMembers(gId);
+        User owner = userGroupService.selectOwner(gId);//群主
+        List<User> memberList=userGroupService.selectMembers(gId);//群成员List
+        List<GroupFileShareItem> groupFileShareList = groupFileShareService.getGroupSharedFilesByGId(gId);//群组共享文件List
+        List<User>unpermittedMemberList=groupMemberService.selectUnpermittedMembers(gId);//入群申请
 
         model.addAttribute("uId",uId);
         model.addAttribute("gId",gId);
@@ -154,7 +156,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/{uId}/{gId}/{fId}/groupshare",method = RequestMethod.POST)
-    public String groupShareFile(@PathVariable("uId") int uId, @PathVariable("gId") int gId, @PathVariable("fId") int fId, String remark,
+    public String groupShareFile( String remark, @PathVariable("uId") int uId, @PathVariable("gId") int gId, @PathVariable("fId") int fId,
                                  HttpServletRequest request, RedirectAttributes attributes, Model model){
         ShareStateEnum shareState = groupFileShareService.insertGroupSharedFile(uId,gId,fId,remark);
 

@@ -41,6 +41,7 @@ public class GroupMemberServiceImpl implements GroupMemberService{
 
     @Override
     public List<User> selectUnpermittedMembers(int gId) {
+        //GroupMember里含有uId，需要用此uId得到User对象
         List<GroupMember> groupMemberList=groupMemberDao.selectUnpermittedMembers(gId);
         List<User>detailMemberList=new ArrayList<User>();
         for (GroupMember groupMember:groupMemberList){
@@ -96,19 +97,24 @@ public class GroupMemberServiceImpl implements GroupMemberService{
         groupMember.setuId(uId);
         groupMember.setgId(gId);
 
+        //如果该群为空，返回
         UserGroup userGroup=userGroupDao.selectByPrimaryKey(gId);
         if(userGroup==null){
             return GroupRequestStateEnum.NO_GROUP;
         }
+
+        //如果该群组创建者是自己，返回
         if(userGroup.getBuilderId()==uId){
             return GroupRequestStateEnum.SELF_REQUEST;
         }
 
+        //如果已经加入了该群组，返回
         GroupMember groupMemberFromDB=groupMemberDao.selectByPrimaryKey(groupMember);
         if(groupMemberFromDB!=null){
             return GroupRequestStateEnum.REPEAT;
         }
 
+        //如果群组是公开的，可以直接加入，如果不是，暂时将permitted字段设为0
         if(userGroup.getType().equals("PRIVATE")){
             groupMember.setPermitted(new Byte("0"));
         }else {
