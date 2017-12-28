@@ -40,7 +40,7 @@
 <div class="container">
     <br/><br/><br/><br/><br/>
     <div>${msg}</div>
-    <form role="form" method="post" action="/account/login">
+    <form id="login_form" role="form" method="post" action="/account/login">
         <div class="row">
             <div class="col-md-4 col-md-offset-4 ">
                 <h1>登录</h1>
@@ -54,7 +54,7 @@
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-4 ">
-                <input type="text" class="form-control" name="uId" placeholder="请输入用户ID">
+                <input id="u_id" type="text" class="form-control" name="uId" placeholder="请输入用户ID">
             </div>
         </div>
         <%--<br/>--%>
@@ -65,13 +65,13 @@
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-4 ">
-                <input type="password" class="form-control" name="password" placeholder="请输入用户密码">
+                <input id="password" type="password" class="form-control" name="password" placeholder="请输入用户密码">
             </div>
         </div>
         <br/>
         <div class="row">
             <div class="col-md-4 col-md-offset-4 ">
-                <button type="submit" class="btn btn-primary btn-block">登录</button>
+                <button id="login_btn" type="button" class="btn btn-primary btn-block">登录</button>
             </div>
         </div>
     </form>
@@ -91,5 +91,15 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 
+<script type="text/javascript">
+    $(function () {
+        $('#login_btn').click(function () {
+            //var oldPassword = $('#password').val();
+            //var newPassword = "4";
+            //$("#password").val(newPassword);
+            $('#login_form').submit();
+        })
+    })
+</script>
 
 </html>

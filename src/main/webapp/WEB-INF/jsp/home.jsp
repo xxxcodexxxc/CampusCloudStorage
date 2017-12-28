@@ -74,7 +74,6 @@
                         </form>
                     </div>
                     <div class="tab-pane fade" id="second">
-
                         <form id="file_upload_form" action="/file/upload" method="post" enctype="multipart/form-data">
                             <label>选择文件</label>
                             <div class="form-inline">
@@ -115,7 +114,7 @@
                         <tr>
                             <td width="5%">${file.fId}</td>
                             <td width="25%"><span class="glyphicon glyphicon-file"  style="color: rgb(180,180,180);" aria-hidden="true"></span> ${file.name}</td>
-                            <td width="5%">${file.size}</td>
+                            <td width="5%">${file.size}B</td>
                             <td width="25%">${file.submitTime}</td>
                             <td width="40%">
                                 <a class="file_remove_btn" f_id="${file.fId}">删除</a>

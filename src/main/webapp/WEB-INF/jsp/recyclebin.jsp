@@ -80,7 +80,7 @@
                         <tr>
                             <td width="5%">${file.fId}</td>
                             <td width="25%"><span class="glyphicon glyphicon-file icon-grey" style="color: rgb(180,180,180);" aria-hidden="true"></span> ${file.name}</td>
-                            <td width="5%">${file.size}</td>
+                            <td width="5%">${file.size} B</td>
                             <td width="25%">${file.submitTime}</td>
                             <td width="40%">
                                 <a class="file_delete_btn" f_id="${file.fId}">彻底删除</a>
