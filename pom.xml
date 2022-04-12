@@ -16,7 +16,7 @@
     <!-- mybatis版本号 -->
     <mybatis.version>3.3.0</mybatis.version>
     <!--hadoop版本号 -->
-    <hadoop.version>2.8.2</hadoop.version>
+    <hadoop.version>3.2.3</hadoop.version>
   </properties>
 
   <dependencies>
