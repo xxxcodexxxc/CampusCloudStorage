@@ -12,7 +12,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- spring版本号 -->
-    <spring.version>4.1.7.RELEASE</spring.version>
+    <spring.version>4.2.7.RELEASE</spring.version>
     <!-- mybatis版本号 -->
     <mybatis.version>3.3.0</mybatis.version>
     <!--hadoop版本号 -->
